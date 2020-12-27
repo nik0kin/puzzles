@@ -1,6 +1,7 @@
 <!doctype html>
 <!-- Template html file -->
 <html>
+
 <head>
     <meta charset="utf-8" />
     <title>{{PUZZLE}}</title>
@@ -10,15 +11,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="css/puzzles.css" rel="stylesheet">
 </head>
+
 <body class="puzzle">
-<div class="container">
+    <div class="container">
 
-    <header>
-        <h1>{{PUZZLE}}</h1>
-        <span class="subtitle">from Simon Tatham's portable puzzle collection</span>
-    </header>
+        <header>
+            <h1>{{PUZZLE}}</h1>
+            <span class="subtitle">from Simon Tatham's portable puzzle collection</span>
+        </header>
 
-    <!--[if lt IE 9]>
+        <!--[if lt IE 9]>
     <div class="alert alert-block alert-warning">
         <h4>Note:</h4>
         This puzzle may be quite slow to load in this version of Internet Explorer.
@@ -26,146 +28,144 @@
         or switching to a browser like Chrome or Firefox.
     </div>
     <![endif]-->
-    <noscript>This puzzle is an interactive game implemented in JavaScript.
-        To play it, you will need to enable JavaScript in your browser.</noscript>
+        <noscript>This puzzle is an interactive game implemented in JavaScript.
+            To play it, you will need to enable JavaScript in your browser.</noscript>
 
-    <section class="app" id="app">
+        <section class="app" id="app">
 
-        <menu class="control" type="toolbar">
-            <div class="buttongroup">
-                <select id="game_preset_menu"></select>
-                <button class="command game-new" title="New game">New</button>
-                <button class="command game-restart" title="Reset this game to the beginning">Restart</button>
-                <button class="command game-solve" title="Show solution">Solve</button>
+            <menu class="control" type="toolbar">
+                <div class="buttongroup">
+                    <select id="game_preset_menu"></select>
+                    <button class="command game-new" title="New game">New</button>
+                    <button class="command game-restart" title="Reset this game to the beginning">Restart</button>
+                    <button class="command game-solve" title="Show solution">Solve</button>
+                </div>
+                <div class="buttongroup">
+                    <button class="command undo" title="Reverse your last move">Undo</button>
+                    <button class="command redo">Redo</button>
+                </div>
+            </menu>
+
+            <div class="game">
+                <div id="status"></div>
+                <canvas id="gameboard"></canvas>
             </div>
-            <div class="buttongroup">
-                <button class="command undo" title="Reverse your last move">Undo</button>
-                <button class="command redo">Redo</button>
+
+            <menu class="keyboard" type="toolbar">
+                <div class="buttongroup">
+                    <button>1</button>
+                    <button>2</button>
+                    <button>3</button>
+                    <button>4</button>
+                    <button>5</button>
+                </div>
+                <div class="buttongroup">
+                    <button>6</button>
+                    <button>7</button>
+                    <button>8</button>
+                    <button>9</button>
+                    <button>0</button>
+                </div>
+                <div class="buttongroup">
+                    <button data-key="0x0D" title="Toggle pen/pencil mode">Pencil</button>
+                    <button data-key="0x7F" title="Blank the selected cell">Clear</button>
+                </div>
+            </menu>
+
+            <div class="message-backdrop" aria-hidden="true">
+                <div class="alert-info message" id="loading" role="alert" tabindex="-1" aria-labelledby="loading_label">
+                    <h4 id="loading_label">Generating game</h4>
+                    <p>This could take a bit&hellip;</p>
+                </div>
+                <div class="alert-success message" id="win" role="dialog" tabindex="-1" aria-labelledby="win_label">
+                    <button class="close">&times;</button>
+                    <h4 id="win_label">Congratulations!</h4>
+                    <p>You solved the puzzle</p>
+                    <button class="command game-new">New Game</button>
+                </div>
+                <div class="alert-danger message" id="loss" role="dialog" tabindex="-1" aria-labelledby="loss_label">
+                    <button class="close">&times;</button>
+                    <h4 id="loss_label">Uh-oh:</h4>
+                    <p>Looks like you&#39;re out of options</p>
+                    <button class="command game-new">New Game</button>
+                </div>
             </div>
-        </menu>
 
-        <div class="game">
-            <div id="status"></div>
-            <canvas id="gameboard"></canvas>
-        </div>
+        </section>
 
-        <menu class="keyboard" type="toolbar">
-            <div class="buttongroup">
-                <button>1</button>
-                <button>2</button>
-                <button>3</button>
-                <button>4</button>
-                <button>5</button>
-            </div>
-            <div class="buttongroup">
-                <button>6</button>
-                <button>7</button>
-                <button>8</button>
-                <button>9</button>
-                <button>0</button>
-            </div>
-            <div class="buttongroup">
-                <button data-key="0x0D" title="Toggle pen/pencil mode">Pencil</button>
-                <button data-key="0x7F" title="Blank the selected cell">Clear</button>
-            </div>
-        </menu>
+        <section class="help">
+            <!-- Add some {{SHORT_HELP_TEXT}} here -->
+            <p>See the
+                <a class="docs" href="http://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/{{PUZZLE}}.html"
+                    target="puzzle_docs">full instructions</a>
+            </p>
+        </section>
 
-        <div class="message-backdrop" aria-hidden="true">
-            <div class="alert-info message" id="loading" role="alert" tabindex="-1"
-                 aria-labelledby="loading_label">
-                <h4 id="loading_label">Generating game</h4>
-                <p>This could take a bit&hellip;</p>
-            </div>
-            <div class="alert-success message" id="win" role="dialog" tabindex="-1"
-                 aria-labelledby="win_label">
-                <button class="close">&times;</button>
-                <h4 id="win_label">Congratulations!</h4>
-                <p>You solved the puzzle</p>
-                <button class="command game-new">New Game</button>
-            </div>
-            <div class="alert-danger message" id="loss" role="dialog" tabindex="-1"
-                 aria-labelledby="loss_label">
-                <button class="close">&times;</button>
-                <h4 id="loss_label">Uh-oh:</h4>
-                <p>Looks like you&#39;re out of options</p>
-                <button class="command game-new">New Game</button>
-            </div>
-        </div>
-
-    </section>
-
-    <section class="help">
-        <!-- Add some {{SHORT_HELP_TEXT}} here -->
-        <p>See the
-            <a class="docs"
-               href="http://www.chiark.greenend.org.uk/~sgtatham/puzzles/doc/{{PUZZLE}}.html"
-               target="puzzle_docs">full instructions</a></p>
-    </section>
-
-    <section class="debug" id="debug"></section>
-</div>
+        <section class="debug" id="debug"></section>
+    </div>
 
 
-<script src="js/debug.js"></script>
-<script src="js/lib/future.js"></script>
+    <script src="js/debug.js"></script>
+    <script src="js/lib/future.js"></script>
 
-<!--[if lt IE 9]>
+    <!--[if lt IE 9]>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script src="js/lib/excanvas.js"></script>
 <![endif]-->
-<!--[if gte IE 9]><!-->
-<script src="http://code.jquery.com/jquery-2.0.0b2.min.js"></script>
-<!--<![endif]-->
-<script>
-    jQuery('noscript').hide(); // IE8
-    Module = {};
-    Module['noInitialRun'] = true;
-    Module['noExitRuntime'] = true;
-    // Load page with ?memmon query string for memory monitoring
-    var ENABLE_C_MEMORY_MONITOR = (/[?&]memmon([&#]|$)/i).test(document.location.href);
-    if (ENABLE_C_MEMORY_MONITOR || (/[?&]debug([&#]|$)/i).test(document.location.href)) {
-        jQuery('#debug').show();
-    }
-</script>
-<script src="js/lib/jquery.requestAnimationFrame.min.js"></script>
-<script src="js/cmemmonitor.js"></script>
-<script src="js/cglue.js"></script>
-<script src="js/puzzle.js"></script>
-<script src="js/events.js"></script>
-<script src="js/drawing.js"></script>
-<script src="js/message.js"></script>
-<script>
-    // Load the correct version of game.js for this browser.
-    // (Safari 5 mobile doesn't support Float64Array;
-    // Android, IE, etc. don't support any typed arrays.
-    // Chrome and Firefox run significantly faster with typed arrays.)
-    // Load page with ?nofast query string to force non-TypedArray version.
-    (function() {
-        var supportsTypedArrays = (typeof Float64Array !== 'undefined'),
-            nofast = (/[?&]nofast([&#]|$)/i).test(document.location.href),
-            gameSrc = "js/{{PUZZLE}}" + (supportsTypedArrays && !nofast ? ".fast.js" : ".js"),
-            script = document.createElement('script'),
-            head = document.getElementsByTagName('head')[0];
-        debug("Loading game from", gameSrc);
-        script.src = gameSrc;
-        head.appendChild(script);
-        // The final line of gameSrc calls game_script_loaded() in the global namespace
-    })();
+    <!--[if gte IE 9]><!-->
+    <script src="https://code.jquery.com/jquery-2.0.0b2.min.js"></script>
+    <!--<![endif]-->
+    <script>
+        jQuery('noscript').hide(); // IE8
+        Module = {};
+        Module['noInitialRun'] = true;
+        Module['noExitRuntime'] = true;
+        // Load page with ?memmon query string for memory monitoring
+        var ENABLE_C_MEMORY_MONITOR = (/[?&]memmon([&#]|$)/i).test(document.location.href);
+        if (ENABLE_C_MEMORY_MONITOR || (/[?&]debug([&#]|$)/i).test(document.location.href)) {
+            jQuery('#debug').show();
+        }
+    </script>
+    <script src="js/lib/jquery.requestAnimationFrame.min.js"></script>
+    <script src="js/cmemmonitor.js"></script>
+    <script src="js/cglue.js"></script>
+    <script src="js/puzzle.js"></script>
+    <script src="js/events.js"></script>
+    <script src="js/drawing.js"></script>
+    <script src="js/message.js"></script>
+    <script>
+        // Load the correct version of game.js for this browser.
+        // (Safari 5 mobile doesn't support Float64Array;
+        // Android, IE, etc. don't support any typed arrays.
+        // Chrome and Firefox run significantly faster with typed arrays.)
+        // Load page with ?nofast query string to force non-TypedArray version.
+        (function () {
+            var supportsTypedArrays = (typeof Float64Array !== 'undefined'),
+                nofast = (/[?&]nofast([&#]|$)/i).test(document.location.href),
+                gameSrc = "js/{{PUZZLE}}" + (supportsTypedArrays && !nofast ? ".fast.js" : ".js"),
+                script = document.createElement('script'),
+                head = document.getElementsByTagName('head')[0];
+            debug("Loading game from", gameSrc);
+            script.src = gameSrc;
+            head.appendChild(script);
+            // The final line of gameSrc calls game_script_loaded() in the global namespace
+        })();
 
-    function game_script_loaded() {
-        jQuery(function($) { // once the DOM is ready (perhaps immediately)...
-            if (typeof CMemoryMonitor !== 'undefined') {
-                CMemoryMonitor.initMeters('#debug');
-            }
+        function game_script_loaded() {
+            jQuery(function ($) { // once the DOM is ready (perhaps immediately)...
+                if (typeof CMemoryMonitor !== 'undefined') {
+                    CMemoryMonitor.initMeters('#debug');
+                }
 
-            var puzzle = Puzzle('app', 'gameboard', 'status');
+                var puzzle = Puzzle('app', 'gameboard', 'status');
 
-            // Wait for a browser repaint before generating the new game
-            setTimeout(function() {
-                puzzle.newGame();
-            }, 0);
-        });
-    }
-</script>
+                // Wait for a browser repaint before generating the new game
+                setTimeout(function () {
+                    puzzle.newGame();
+                }, 0);
+            });
+        }
+    </script>
 </body>
+
 </html>
